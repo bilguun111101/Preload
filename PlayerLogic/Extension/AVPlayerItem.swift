@@ -60,7 +60,7 @@ extension AVPlayerItem {
             return
         }
         
-        print("loaderURL ::  :: : : :: : : : :     ", loaderURL)
+        print("loaderURL   :    ", loaderURL)
         
         let urlAsset = AVURLAsset(url: loaderURL)
         urlAsset.resourceLoader.setDelegate(VideoLoadManager.shared, queue: .main)

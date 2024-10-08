@@ -10,7 +10,8 @@ import AVFoundation
 extension URL {
     
     /// `AVAssetResourceLoaderDelegate` doesn't get called for URLs starting with `http` or `https`; adding this temporary prefix to the URL works.
-    private static let loaderPrefix = "loader-"
+//    private static let loaderPrefix = "loader-"
+    private static let loaderPrefix = "playerlogic"
     
     /// `AVAssetResourceLoaderDelegate` doesn't get called for URLs with no extension; adding this temporary one works.
     private static let tempExtension = "mp4"

@@ -20,7 +20,6 @@ public class VideoLoadManager: NSObject {
             print("loaderMap       :          ", loaderMap.count)
         }
     }
-    
 }
 
 extension VideoLoadManager: AVAssetResourceLoaderDelegate {
@@ -42,7 +41,6 @@ extension VideoLoadManager: AVAssetResourceLoaderDelegate {
                 loader.append(request: loadingRequest)
             } else {
                 let loader = try VideoLoader(url: url)
-                print("else Loader is working")
                 loader.delegate = self
                 loader.append(request: loadingRequest)
                 loaderMap[url] = loader
@@ -55,10 +53,10 @@ extension VideoLoadManager: AVAssetResourceLoaderDelegate {
     }
     
     public func resourceLoader(_ resourceLoader: AVAssetResourceLoader, didCancel loadingRequest: AVAssetResourceLoadingRequest) {
+        print("loadingRequest.isCancelled : ", loadingRequest.isCancelled)
         guard let url = loadingRequest.url, let loader = loaderMap[url] else {
             return
         }
-        
         loader.remove(request: loadingRequest)
     }
     

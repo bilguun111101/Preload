@@ -1,4 +1,4 @@
-//
+
 //  VideoRequestLoader.swift
 //  PlayerLogic
 //
@@ -40,7 +40,6 @@ class VideoRequestLoader {
         if dataRequest.currentOffset != 0 {
             offset = Int(dataRequest.currentOffset)
         }
-        
         if dataRequest.requestsAllDataToEndOfResource {
             downloader.downloadToEnd(from: offset)
         } else {
@@ -96,7 +95,6 @@ private extension VideoRequestLoader {
             request.contentInformationRequest != nil else {
             return
         }
-        print("info  :  ", info)
         request.contentInformationRequest?.contentType = info.contentType
         request.contentInformationRequest?.contentLength = Int64(info.contentLength)
         request.contentInformationRequest?.isByteRangeAccessSupported = info.isByteRangeAccessSupported

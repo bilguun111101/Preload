@@ -188,7 +188,9 @@ open class VideoPlayerView: UIView {
         player.automaticallyWaitsToMinimizeStalling = false
         
         let playerItem = AVPlayerItem(loader: url)
+//        let playerItem = AVPlayerItem(url: url)
         playerItem.canUseNetworkResourcesForLiveStreamingWhilePaused = true
+        player.isMuted = true
         
         self.player = player
         self.playerURL = url

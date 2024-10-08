@@ -8,9 +8,7 @@
 import AVFoundation
 
 extension AVAssetResourceLoadingRequest {
-    
     var url: URL? {
         request.url?.deconstructed
     }
-    
 }

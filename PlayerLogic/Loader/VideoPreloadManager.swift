@@ -44,12 +44,9 @@ public class VideoPreloadManager: NSObject {
             let cacheHandler = try? VideoCacheHandler(url: url) else {
             return
         }
-        print("cacheHandler : ", cacheHandler)
         downloader = VideoDownloader(url: url, cacheHandler: cacheHandler)
         downloader?.delegate = self
         downloader?.download(from: 0, length: preloadByteCount)
-        
-        print("download : ", downloader as Any)
         
         if cacheHandler.configuration.downloadedByteCount < preloadByteCount {
             didStart?()

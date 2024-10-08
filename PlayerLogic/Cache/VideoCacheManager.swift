@@ -13,9 +13,6 @@ private let identifier = NSTemporaryDirectory().appendingPathComponent("xs.playe
 public enum VideoCacheManager {
     
     public static func cachedFilePath(for url: URL) -> String {
-        print("identifier.appendingPathComponent(url.absoluteString.md5).appendingPathExtension(url.pathExtension)         ssss         ", identifier
-            .appendingPathComponent(url.absoluteString.md5)
-            .appendingPathExtension(url.pathExtension)!)
         return identifier
             .appendingPathComponent(url.absoluteString.md5)
             .appendingPathExtension(url.pathExtension)!

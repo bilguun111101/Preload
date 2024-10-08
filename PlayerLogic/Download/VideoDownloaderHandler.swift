@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AVFoundation
 
 extension Notification.Name {
     
@@ -46,9 +47,9 @@ class VideoDownloaderHandler {
     private var lastNotifyTime: TimeInterval = 0
     private var isPreload: Bool = false
     
-//    init(url: URL, actions: [VideoCacheAction], cacheHandler: VideoCacheHandler, isPreload: Bool) {
+    //    init(url: URL, actions: [VideoCacheAction], cacheHandler: VideoCacheHandler, isPreload: Bool) {
     init(url: URL, actions: [VideoCacheAction], cacheHandler: VideoCacheHandler) {
-//        self.isPreload = isPreload
+        //        self.isPreload = isPreload
         self.url = url
         self.actions = actions
         self.cacheHandler = cacheHandler
@@ -78,19 +79,25 @@ class VideoDownloaderHandler {
 }
 
 extension VideoDownloaderHandler: VideoDownloaderSessionDelegateHandlerDelegate {
+//extension VideoDownloaderHandler: URLSessionDataDelegate {
     
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         let trust = challenge.protectionSpace.serverTrust
         completionHandler(.useCredential, trust != nil ? URLCredential(trust: trust!) : nil)
+//        completionHandler(.performDefaultHandling, nil)
     }
     
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
-        #if !os(macOS)
-        guard
-            let mimeType = response.mimeType,
-            mimeType.contains("video/")
-            else { completionHandler(.cancel); return }
-        #endif
+        print("response : :: : : : : : : :: : :  ::: : : : : ", response.mimeType)
+//        guard
+//            let mimeType = response.mimeType,
+//            mimeType.contains("video/")
+//        else {
+//            print("sha 2  kslj ks jskj jljs lk jslk jslk .jsl kjs ")
+////            completionHandler(.cancel);
+////            return
+//            continue
+//        }
         delegate?.handler(self, didReceive: response)
         
         completionHandler(.allow)
@@ -112,13 +119,12 @@ extension VideoDownloaderHandler: VideoDownloaderSessionDelegateHandlerDelegate 
     }
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-//        cacheHandler.save()
-        
-        if let error = error {
+        cacheHandler.save()
+        if let error = error as NSError? {
             delegate?.handler(self, didFinish: error)
             notifyFinished(error: error)
             isCancelled = true
-            print("dataTask   :  ssss  ", error.localizedDescription)
+            print("dataTask   :  ssss  ", error)
         } else {
             notifyProgress(flush: true)
             notifyFinished(error: nil)
@@ -150,7 +156,7 @@ private extension VideoDownloaderHandler {
         sessionDelegate = VideoDownloaderSessionDelegateHandler(delegate: self)
         
         session = URLSession(
-            configuration: .ephemeral,
+            configuration: .default,
             delegate: VideoDownloaderSessionDelegateHandler(delegate: self),
             delegateQueue: .main
         )
@@ -161,9 +167,13 @@ private extension VideoDownloaderHandler {
             timeoutInterval: 60
         )
         
+        urlRequest.setValue("video/mp4", forHTTPHeaderField: "Content-Type")
+        urlRequest.httpMethod = "GET"
+        
         let start = action.range.location
         let end = action.range.location + action.range.length - 1
         urlRequest.addValue("bytes=\(start)-\(end)", forHTTPHeaderField: "Range")
+        print("bytes=\(start)-\(end)")
         
         for field in VideoLoadManager.shared.customHTTPHeaderFields?(url) ?? [:] {
             urlRequest.addValue(field.value, forHTTPHeaderField: field.key)
@@ -172,32 +182,32 @@ private extension VideoDownloaderHandler {
         startOffset = start
         
         task = session?.dataTask(with: urlRequest)
+        
         task?.resume()
     }
-    
-    func notifyProgress(flush: Bool) {
-        let currentTime = CFAbsoluteTimeGetCurrent()
-        guard lastNotifyTime < currentTime - 0.1 || flush else { return }
-        lastNotifyTime = currentTime
         
-        let configuration = cacheHandler.configuration
-        NotificationCenter.default.post(
-            name: .VideoDownloadProgressDidChanged,
-            object: nil,
-            userInfo: ["configuration": configuration]
-        )
-    }
-    
-    func notifyFinished(error: Error?) {
-        let configuration = cacheHandler.configuration
-        var userInfo: [AnyHashable: Any] = ["configuration": configuration]
-        if let error = error { userInfo[NSURLErrorKey] = error }
+        func notifyProgress(flush: Bool) {
+            let currentTime = CFAbsoluteTimeGetCurrent()
+            guard lastNotifyTime < currentTime - 0.1 || flush else { return }
+            lastNotifyTime = currentTime
+            
+            let configuration = cacheHandler.configuration
+            NotificationCenter.default.post(
+                name: .VideoDownloadProgressDidChanged,
+                object: nil,
+                userInfo: ["configuration": configuration]
+            )
+        }
         
-        NotificationCenter.default.post(
-            name: .VideoDownloadDidFinished,
-            object: nil,
-            userInfo: userInfo
-        )
-    }
-    
+        func notifyFinished(error: Error?) {
+            let configuration = cacheHandler.configuration
+            var userInfo: [AnyHashable: Any] = ["configuration": configuration]
+            if let error = error { userInfo[NSURLErrorKey] = error }
+            
+            NotificationCenter.default.post(
+                name: .VideoDownloadDidFinished,
+                object: nil,
+                userInfo: userInfo
+            )
+        }
 }

@@ -9,6 +9,29 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>playerlogic.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>2F267D082CAEA0A6005DF5EA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2F267D212CAEA0A8005DF5EA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2F267D2B2CAEA0A9005DF5EA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 	</dict>
 </dict>
 </plist>

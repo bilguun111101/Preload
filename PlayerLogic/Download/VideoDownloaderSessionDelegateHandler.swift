@@ -49,7 +49,6 @@ extension VideoDownloaderSessionDelegateHandler: URLSessionDataDelegate {
     }
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        
         if buffer.count > 0 && error == nil {
             callbackBuffer(session: session, dataTask: task as! URLSessionDataTask)
         }

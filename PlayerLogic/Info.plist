@@ -17,6 +17,11 @@
 					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
 					<key>UISceneStoryboardFile</key>
 					<string>Main</string>
+                    
+                    <key>CFBundleURLSchemes</key>
+                    <array>
+                        <string>playerlogic</string>
+                    </array>
 				</dict>
 			</array>
 		</dict>

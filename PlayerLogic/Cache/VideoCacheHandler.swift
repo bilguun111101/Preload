@@ -20,6 +20,7 @@ public class VideoCacheHandler {
         let fileManager = FileManager.default
         let filePath = VideoCacheManager.cachedFilePath(for: url)
         let fileURL = URL(fileURLWithPath: filePath)
+        print("fileURL :                                                   :              ", fileURL)
         let fileDirectory = filePath.deletingLastPathComponent
         
         if !fileManager.fileExists(atPath: fileDirectory) {

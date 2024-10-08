@@ -37,7 +37,6 @@ public class VideoDownloader {
     
     public func download(from offset: Int, length: Int) {
         let actions = cacheHandler.actions(for: NSRange(location: offset, length: length))
-        print("actions         :::::::              ", actions)
 
         downloaderHandler = VideoDownloaderHandler(url: url, actions: actions, cacheHandler: cacheHandler)
         downloaderHandler?.delegate = self
@@ -87,6 +86,7 @@ extension VideoDownloader: VideoDownloaderHandlerDelegate {
     }
     
     func handler(_ handler: VideoDownloaderHandler, didReceive data: Data, isLocal: Bool) {
+//        print("data    handler     ' ' ' '    cached     :     ", data)
         delegate?.downloader(self, didReceive: data)
     }
     
